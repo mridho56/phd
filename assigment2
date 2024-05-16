@@ -1,0 +1,30 @@
+#Calculate the vector of average excess returns
+mean_excess_returns2 <- colMeans(excess_returns_matrix)
+
+#calculate the covariance matrix of excess returns 
+cov_excess_returns <- cov(excess_returns_matrix)
+
+#Calculate the invers of cobariance matrix
+inv_cov_excess_return <- solve(cov_excess_returns)
+
+#calculate the time series of excess returns using formula
+R_e <- matrix(0, nrow = nrow(excess_returns_matrix), ncol = 1) #make matrix for the result
+
+for (i in 1:nrow(excess_returns_matrix)) {
+  R_e[i,] <- mean_excess_returns2 %*% inv_cov_excess_return %*% (excess_returns_matrix[i,])
+}
+
+#Convert R_e to vector
+R_e <- as.vector(R_e)
+
+#results
+#Mean
+mean_excess_return2 <- mean(R_e)
+#Sd
+sd_excess_return2 <- sd(R_e)
+#Sharpe ratio
+sharpe_ratio2 <- mean_excess_return2 / sd_excess_return2
+
+cat("Monthly mean excess return", mean_excess_return2, "\n")
+cat("Monthly Standard Deviation", sd_excess_return2, "\n")
+cat("Monthly Sharpe ratio", sharpe_ratio2, "\n")
